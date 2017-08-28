@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "firebase": "^4.3.0",
     "jsog": "^1.0.7",
     "lodash": "^4.17.4",
     "prettier": "^1.5.3",
