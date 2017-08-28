@@ -6,6 +6,7 @@ const gamesSelector = state => state.games;
 
 const free = {
   score: { score: 0 },
+  seed: null,
   team: {
     id: shortId.generate(),
     name: 'free'
