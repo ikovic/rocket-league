@@ -1,5 +1,6 @@
 import shortId from 'shortid';
 import robin from 'roundrobin';
+import flatten from 'lodash/flatten';
 import actionNames from '../../util/actionNames';
 
 const getActionName = actionNames('roundRobin');
@@ -17,10 +18,24 @@ export default (state = initialState, action) => {
   }
 };
 
-export const start = teams => ({
-  type: START,
-  round: {
+export const start = teams => {
+  const pairs = flatten(robin(teams.length, teams)).map(pair => ({
     id: shortId.generate(),
-    pairs: robin(teams.length, teams)
-  }
-});
+    home: {
+      team: pair[0],
+      score: null
+    },
+    away: {
+      team: pair[1],
+      score: null
+    }
+  }));
+
+  return {
+    type: START,
+    round: {
+      id: shortId.generate(),
+      pairs
+    }
+  };
+};
