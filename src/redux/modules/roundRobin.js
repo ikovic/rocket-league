@@ -5,14 +5,17 @@ import actionNames from '../../util/actionNames';
 
 const getActionName = actionNames('roundRobin');
 
-const initialState = [];
+const initialState = {};
 
 export const START = getActionName('START');
+export const SET_SCORE = getActionName('SET_SCORE');
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case START:
-      return [...state, action.round];
+      return action.round;
+    case SET_SCORE:
+      return updateScore(state, action.match);
     default:
       return state;
   }
@@ -39,3 +42,35 @@ export const start = teams => {
     }
   };
 };
+
+const updateScore = (state, matchMetadata) => {
+  const match = state.pairs.find(pair => pair.id === matchMetadata.id);
+  const matchIndex = state.pairs.indexOf(match);
+
+  const homeTeam = match.home;
+  const awayTeam = match.away;
+
+  const updatedMatch = {
+    ...match,
+    home: { ...homeTeam, score: matchMetadata.home },
+    away: { ...awayTeam, score: matchMetadata.away }
+  };
+
+  return {
+    ...state,
+    pairs: [
+      ...state.pairs.slice(0, matchIndex),
+      updatedMatch,
+      ...state.pairs.slice(matchIndex + 1)
+    ]
+  };
+};
+
+export const setScore = (matchId, homeScore, awayScore) => ({
+  type: SET_SCORE,
+  match: {
+    id: matchId,
+    home: homeScore,
+    away: awayScore
+  }
+});
