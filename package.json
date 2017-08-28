@@ -4,10 +4,17 @@
   "private": true,
   "dependencies": {
     "jsog": "^1.0.7",
+    "prettier": "^1.5.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
     "react-scripts": "1.0.11",
-    "react-tournament-bracket": "^0.1.0"
+    "react-tournament-bracket": "^0.1.0",
+    "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
+    "shortid": "^2.2.8"
   },
   "scripts": {
     "start": "react-scripts start",
