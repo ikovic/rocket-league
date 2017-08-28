@@ -24,6 +24,7 @@ export default (state = initialState, action) => {
 export const start = teams => {
   const pairs = flatten(robin(teams.length, teams)).map(pair => ({
     id: shortId.generate(),
+    played: null,
     home: {
       team: pair[0],
       score: null
@@ -52,6 +53,7 @@ const updateScore = (state, matchMetadata) => {
 
   const updatedMatch = {
     ...match,
+    played: Date.now(),
     home: { ...homeTeam, score: matchMetadata.home },
     away: { ...awayTeam, score: matchMetadata.away }
   };

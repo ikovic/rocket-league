@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as roundRobinActions from '../../../redux/modules/roundRobin';
+import { getRoundRobinRanking } from '../../../redux/selectors/ranking';
 import Score from '../../../components/Score';
+import Ranking from '../../../components/Ranking';
 
 class RoundRobin extends PureComponent {
   state = {
@@ -37,6 +39,7 @@ class RoundRobin extends PureComponent {
 
   render() {
     const { match, scoreEditorVisible } = this.state;
+    const ranking = this.props.ranking;
 
     return (
       <div>
@@ -46,13 +49,15 @@ class RoundRobin extends PureComponent {
         <ul>
           {this.renderPairs()}
         </ul>
+        <Ranking ranking={ranking} />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  robin: state.roundRobin
+  robin: state.roundRobin,
+  ranking: getRoundRobinRanking(state)
 });
 
 const mapDispatchToProps = dispatch => ({
