@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { roundsSelector } from '../../../redux/selectors/roundRobin';
 
 class RoundRobin extends PureComponent {
   renderPairs(round) {
     console.log(round);
     return round.pairs.map((pair, idx) =>
       <li key={idx}>
-        {pair[0][0].name} VS {pair[0][1].name}
+        {pair[0].name} VS {pair[1].name}
       </li>
     );
   }
@@ -35,7 +36,7 @@ class RoundRobin extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  rounds: state.roundRobin
+  rounds: roundsSelector(state)
 });
 
 export default connect(mapStateToProps)(RoundRobin);
