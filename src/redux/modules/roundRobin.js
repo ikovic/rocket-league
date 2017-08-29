@@ -1,14 +1,19 @@
 import shortId from 'shortid';
 import robin from 'roundrobin';
 import flatten from 'lodash/flatten';
+import * as firebaseActions from '../../firebase';
 import actionNames from '../../util/actionNames';
 
 const getActionName = actionNames('roundRobin');
 
-const initialState = {};
+const initialState = {
+  id: null,
+  pairs: []
+};
 
 export const START = getActionName('START');
 export const SET_SCORE = getActionName('SET_SCORE');
+export const LOAD = getActionName('LOAD');
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -16,6 +21,8 @@ export default (state = initialState, action) => {
       return action.round;
     case SET_SCORE:
       return updateScore(state, action.match);
+    case LOAD:
+      return action.roundRobin;
     default:
       return state;
   }
@@ -54,25 +61,45 @@ const updateScore = (state, matchMetadata) => {
   const updatedMatch = {
     ...match,
     played: Date.now(),
-    home: { ...homeTeam, score: matchMetadata.home },
-    away: { ...awayTeam, score: matchMetadata.away }
+    home: { ...homeTeam, score: Number(matchMetadata.home) },
+    away: { ...awayTeam, score: Number(matchMetadata.away) }
   };
 
   return {
     ...state,
-    pairs: [
-      ...state.pairs.slice(0, matchIndex),
-      updatedMatch,
-      ...state.pairs.slice(matchIndex + 1)
-    ]
+    pairs: [...state.pairs.slice(0, matchIndex), updatedMatch, ...state.pairs.slice(matchIndex + 1)]
   };
 };
 
-export const setScore = (matchId, homeScore, awayScore) => ({
+export const setScore3 = (matchId, homeScore, awayScore) => ({
   type: SET_SCORE,
   match: {
     id: matchId,
     home: homeScore,
     away: awayScore
   }
+});
+
+export const setScore = (matchId, homeScore, awayScore) => (dispatch, getState) => {
+  dispatch({
+    type: SET_SCORE,
+    match: {
+      id: matchId,
+      home: homeScore,
+      away: awayScore
+    }
+  });
+
+  const { tournament, roundRobin } = getState();
+
+  firebaseActions.saveTournament({ ...tournament, draw: roundRobin });
+
+  return dispatch({
+    type: 'FIREBASE_SAVE'
+  });
+};
+
+export const load = roundRobin => ({
+  type: LOAD,
+  roundRobin
 });

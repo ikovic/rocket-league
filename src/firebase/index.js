@@ -11,6 +11,9 @@ const config = {
 
 firebase.initializeApp(config);
 
-export const addTeam = team => firebase.database().ref('teams/' + team.id).set(team);
+export const addTeam = team => firebase.database().ref(`teams/${team.id}`).set(team);
+
+export const saveTournament = tournament =>
+  firebase.database().ref(`tournaments/${tournament.id}`).set(tournament);
 
 export default firebase;
