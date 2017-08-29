@@ -2,20 +2,22 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as teamsActions from '../../redux/modules/teams';
 
-const TeamItem = ({ team, onDelete }) =>
+const TeamItem = ({ team, onDelete, readOnly }) =>
   <li>
     {team.name}
-    <button onClick={() => onDelete(team.id)}>-</button>
+    {readOnly ? null : <button onClick={() => onDelete(team.id)}>-</button>}
   </li>;
 
 class TeamList extends PureComponent {
   handleDeleteClick = id => this.props.removeTeam(id);
 
   render() {
+    const { teams, readOnly } = this.props;
+
     return (
       <ul>
-        {this.props.teams.map(team =>
-          <TeamItem key={team.id} team={team} onDelete={this.handleDeleteClick} />
+        {teams.map(team =>
+          <TeamItem key={team.id} team={team} readOnly={readOnly} onDelete={this.handleDeleteClick} />
         )}
       </ul>
     );

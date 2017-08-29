@@ -33,6 +33,7 @@ class Tournament extends PureComponent {
 
     return (
       <div>
+        <h3>Tournament</h3>
         {tournament.started
           ? this.renderTournament()
           : <span>
