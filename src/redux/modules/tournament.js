@@ -60,11 +60,12 @@ export const start = () => (dispatch, getState) => {
 
 export const load = loadedTournament => (dispatch, getState) => {
   const { tournament, roundRobin } = getState();
-  const extractedTourney = loadedTournament[Object.keys(loadedTournament)[0]];
 
-  if (!extractedTourney) {
+  if (!loadedTournament) {
     return dispatch({ type: NO_CHANGES });
   }
+
+  const extractedTourney = loadedTournament[Object.keys(loadedTournament)[0]];
 
   const tournamentMetadata = {
     id: extractedTourney.id,

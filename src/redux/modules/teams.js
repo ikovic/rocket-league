@@ -9,6 +9,7 @@ const initialState = [];
 export const LOAD_TEAMS = getActionName('LOAD_TEAMS');
 export const ADD_TEAM = getActionName('ADD_TEAM');
 export const REMOVE_TEAM = getActionName('REMOVE_TEAM');
+export const NO_CHANGES = getActionName('NO_CHANGES');
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -33,10 +34,7 @@ export const addTeam = name => dispatch => {
 
   return dispatch({
     type: ADD_TEAM,
-    team: {
-      id: shortId.generate(),
-      name
-    }
+    team
   });
 };
 
@@ -45,7 +43,15 @@ export const removeTeam = id => ({
   id
 });
 
-export const loadTeams = teams => ({
-  type: LOAD_TEAMS,
-  teams
-});
+export const loadTeams = teams => {
+  if (!teams) {
+    return {
+      type: NO_CHANGES
+    };
+  }
+
+  return {
+    type: LOAD_TEAMS,
+    teams: Object.keys(teams).map(key => teams[key])
+  };
+};
