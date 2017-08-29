@@ -1,5 +1,6 @@
 import shortId from 'shortid';
 import isEqual from 'lodash/isEqual';
+import without from 'lodash/without';
 import constants from '../../constants';
 import actionNames from '../../util/actionNames';
 import * as roundRobinActions from './roundRobin';
@@ -87,5 +88,10 @@ export const load = loadedTournament => (dispatch, getState) => {
     return dispatch({ type: NO_CHANGES });
   }
 
-  return dispatch(roundRobinActions.load(extractedTourney.draw));
+  return dispatch(
+    roundRobinActions.load({
+      ...extractedTourney.draw,
+      pairs: without(extractedTourney.draw.pairs, undefined)
+    })
+  );
 };
